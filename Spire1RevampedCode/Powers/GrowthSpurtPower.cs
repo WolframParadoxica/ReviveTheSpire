@@ -39,17 +39,19 @@ public sealed class GrowthSpurtPower : Spire1RevampedPower
 
     public override decimal ModifyPowerAmountGivenMultiplicative(PowerModel power, Creature giver, decimal amount, Creature? target, CardModel? cardSource)
     {
-        if (power is not SummonNextTurnPower || giver != Owner || cardSource is null || amount <= 0M || (TriggeringCard is not null && TriggeringCard != cardSource)) return 1M;
-        _pendingPowerSource = cardSource;
+        if (power is not SummonNextTurnPower || giver != Owner || cardSource is null || amount <= 0M || (TriggeringCard is not null && TriggeringCard != cardSource))
+            return 1M;
+
         return 2M;
     }
 
-    public override Task AfterModifyingPowerAmountGiven(PowerModel power)
+    public override Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
     {
-        if (power is not SummonNextTurnPower) return Task.CompletedTask;
-        TriggeringCard = _pendingPowerSource ?? _currentlyPlayingCard;
+        if (power is not SummonNextTurnPower || applier != Owner || cardSource is null || amount <= 0M || (TriggeringCard is not null && TriggeringCard != cardSource))
+            return Task.CompletedTask;
+
+        TriggeringCard = cardSource;
         WasDoubled = true;
-        _pendingPowerSource = null; 
         return Task.CompletedTask;
     }
 
