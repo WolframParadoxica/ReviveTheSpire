@@ -43,6 +43,6 @@ public sealed class OmenPower : Spire1RevampedPower
 
     private bool HasDoubledTemporaryPowerSource(PowerModel power)
     {
-        return DoubledPowers.OfType<ITemporaryPower>().Any(p => p.InternallyAppliedPower.GetType() == power.GetType());
+        return _doubledPowers?.OfType<ITemporaryPower>().Any(p => p.InternallyAppliedPower.GetType() == power.GetType()) is true;
     }
 }

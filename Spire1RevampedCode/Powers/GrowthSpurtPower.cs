@@ -17,9 +17,7 @@ namespace Spire1Revamped.Spire1RevampedCode.Powers;
 
 public sealed class GrowthSpurtPower : Spire1RevampedPower
 {
-    private CardModel? _currentlyPlayingCard;
     private CardModel? _triggeringCard;
-    private CardModel? _pendingPowerSource;
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
@@ -30,12 +28,6 @@ public sealed class GrowthSpurtPower : Spire1RevampedPower
     internal CardModel? TriggeringCard { get => _triggeringCard; set { AssertMutable(); _triggeringCard = value; } }
 
     internal bool WasDoubled { get => ((BoolVar)DynamicVars["WasDoubled"]).BoolVal; set { AssertMutable(); ((BoolVar)DynamicVars["WasDoubled"]).BoolVal = value; } }
-
-    public override Task BeforeCardPlayed(CardPlay cardPlay)
-    {
-        _currentlyPlayingCard = cardPlay.Card;
-        return Task.CompletedTask;
-    }
 
     public override decimal ModifyPowerAmountGivenMultiplicative(PowerModel power, Creature giver, decimal amount, Creature? target, CardModel? cardSource)
     {
